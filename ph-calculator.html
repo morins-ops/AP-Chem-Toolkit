@@ -6,73 +6,42 @@
     <title>pH Calculator</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        input { margin: 5px; padding: 5px; }
-        button { padding: 10px 20px; cursor: pointer; }
-        #result { margin-top: 20px; padding: 10px; border: 1px solid #333; }
+        input { margin: 10px 0; }
     </style>
 </head>
 <body>
     <h1>pH Calculator</h1>
-    
-    <h2>Calculate pH from H+ Concentration</h2>
-    <label for="hPlus">H+ Concentration (M): </label>
-    <input type="number" id="hPlus" placeholder="e.g., 0.001"><br>
-    <button onclick="calculatepHFromHPlus()">Calculate pH</button>
-    
-    <h2>Calculate H+ from pH</h2>
-    <label for="ph">pH: </label>
-    <input type="number" id="ph" placeholder="e.g., 3"><br>
-    <button onclick="calculateHPlusFrompH()">Calculate H+</button>
-    
-    <h2>Weak Acid Calculation (Ka method)</h2>
-    <label for="ka">Ka: </label>
-    <input type="number" id="ka" placeholder="e.g., 1.8e-5"><br>
-    <label for="concentration">Initial Concentration (M): </label>
-    <input type="number" id="concentration" placeholder="e.g., 0.1"><br>
-    <button onclick="calculateWeakAcidpH()">Calculate pH (Weak Acid)</button>
-    
-    <div id="result"></div>
-    
+    <h2>Calculate pH from H<sup>+</sup> concentration</h2>
+    <label for="hConcentration">H<sup>+</sup> Concentration (M): </label>
+    <input type="number" step="any" id="hConcentration">
+    <button onclick="calculatePHfromHConcentration()">Calculate pH</button>
+    <p id="phResultFromH"></p>
+
+    <h2>Calculate H<sup>+</sup> concentration from pH</h2>
+    <label for="phValue">pH: </label>
+    <input type="number" step="any" id="phValue">
+    <button onclick="calculateHConcentrationFromPH()">Calculate [H<sup>+</sup>]</button>
+    <p id="hConcentrationResult"></p>
+
     <script>
-        function calculatepHFromHPlus() {
-            const hPlus = parseFloat(document.getElementById('hPlus').value);
-            let resultText = '';
-            
-            if (isNaN(hPlus) || hPlus <= 0) {
-                resultText = 'Error: Please enter a valid positive number for H+ concentration.';
+        function calculatePHfromHConcentration() {
+            const hConcentration = parseFloat(document.getElementById('hConcentration').value);
+            if (!isNaN(hConcentration) && hConcentration > 0) {
+                const ph = -Math.log10(hConcentration);
+                document.getElementById('phResultFromH').innerText = `pH: ${ph.toFixed(2)}`;
             } else {
-                const pH = -Math.log10(hPlus);
-                resultText = `<strong>pH = ${pH.toFixed(2)}</strong><br>Formula: pH = -log[H+]`;
+                document.getElementById('phResultFromH').innerText = 'Please enter a valid H+ concentration.';
             }
-            document.getElementById('result').innerHTML = resultText;
         }
-        
-        function calculateHPlusFrompH() {
-            const pH = parseFloat(document.getElementById('ph').value);
-            let resultText = '';
-            
-            if (isNaN(pH)) {
-                resultText = 'Error: Please enter a valid pH value.';
+
+        function calculateHConcentrationFromPH() {
+            const ph = parseFloat(document.getElementById('phValue').value);
+            if (!isNaN(ph) && ph >= 0 && ph <= 14) {
+                const hConcentration = Math.pow(10, -ph);
+                document.getElementById('hConcentrationResult').innerText = `H+: ${hConcentration.toFixed(2)} M`;
             } else {
-                const hPlus = Math.pow(10, -pH);
-                resultText = `<strong>[H+] = ${hPlus.toExponential(2)} M</strong><br>Formula: [H+] = 10^(-pH)`;
+                document.getElementById('hConcentrationResult').innerText = 'Please enter a valid pH value (0-14).';
             }
-            document.getElementById('result').innerHTML = resultText;
-        }
-        
-        function calculateWeakAcidpH() {
-            const ka = parseFloat(document.getElementById('ka').value);
-            const concentration = parseFloat(document.getElementById('concentration').value);
-            let resultText = '';
-            
-            if (isNaN(ka) || isNaN(concentration) || ka <= 0 || concentration <= 0) {
-                resultText = 'Error: Please enter valid positive numbers.';
-            } else {
-                const hPlus = Math.sqrt(ka * concentration);
-                const pH = -Math.log10(hPlus);
-                resultText = `<strong>pH = ${pH.toFixed(2)}</strong><br>[H+] = ${hPlus.toExponential(2)} M<br>Formula: [H+] = √(Ka × C)`;
-            }
-            document.getElementById('result').innerHTML = resultText;
         }
     </script>
 </body>
