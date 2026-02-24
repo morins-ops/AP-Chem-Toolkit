@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Periodic Table</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .table { display: grid; grid-template-columns: repeat(18, 1fr); }
+        .element { border: 1px solid black; padding: 10px; text-align: center; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Interactive Periodic Table</h1>
+    <div class="table" id="periodic-table"></div>
+    <div id="element-info"></div>
+    
+    <script>
+        const elements = [
+            { symbol: 'H', name: 'Hydrogen', atomicNumber: 1, atomicMass: 1.008 },
+            { symbol: 'He', name: 'Helium', atomicNumber: 2, atomicMass: 4.0026 },
+            // Add more elements here
+            // This is where we’ll include all elements in the periodic table
+        ];
+        
+        const table = document.getElementById('periodic-table');
+        elements.forEach(element => {
+            const div = document.createElement('div');
+            div.classList.add('element');
+            div.textContent = element.symbol;
+            div.onclick = () => {
+                document.getElementById('element-info').innerHTML = 
+                    `<h2>${element.name}</h2>
+                     <p>Atomic Number: ${element.atomicNumber}</p>
+                     <p>Atomic Mass: ${element.atomicMass}</p>`;
+            };
+            table.appendChild(div);
+        });
+    </script>
+</body>
+</html>
